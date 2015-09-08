@@ -58,6 +58,7 @@ PHPAPI double php_combined_lcg(TSRMLS_D) /* {{{ */
 	php_int32 z;
 
 	if (!LCG(seeded)) {
+    php_error_docref(NULL TSRMLS_CC, E_NOTICE, "php_combined_lcg: not seeded");
 		lcg_seed(TSRMLS_C);
 	}
 
@@ -79,18 +80,24 @@ static void lcg_seed(TSRMLS_D) /* {{{ */
 
 	if (gettimeofday(&tv, NULL) == 0) {
 		LCG(s1) = tv.tv_sec ^ (tv.tv_usec<<11);
+    php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s1 = %d ^ %d = %d", tv.tv_sec, tv.tv_usec<<11, LCG(s1));
+
 	} else {
 		LCG(s1) = 1;
+    php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s1 = 1");
 	}
 #ifdef ZTS
 	LCG(s2) = (long) tsrm_thread_id();
+  php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s2 = %d (thread id)", LCG(s2));
 #else
 	LCG(s2) = (long) getpid();
+  php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s2 = %d (process id)", LCG(s2));
 #endif
 
 	/* Add entropy to s2 by calling gettimeofday() again */
 	if (gettimeofday(&tv, NULL) == 0) {
 		LCG(s2) ^= (tv.tv_usec<<11);
+    php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s2 ^= %d ", tv.tv_usec<<11);
 	}
 
 	LCG(seeded) = 1;
@@ -106,10 +113,11 @@ static void lcg_init_globals(php_lcg_globals *lcg_globals_p TSRMLS_DC) /* {{{ */
 PHP_MINIT_FUNCTION(lcg) /* {{{ */
 {
 #ifdef ZTS
-	ts_allocate_id(&lcg_globals_id, sizeof(php_lcg_globals), (ts_allocate_ctor) lcg_init_globals, NULL);
+  ts_allocate_id(&lcg_globals_id, sizeof(php_lcg_globals), (ts_allocate_ctor) lcg_init_globals, NULL);
 #else
-	lcg_init_globals(&lcg_globals);
+  lcg_init_globals(&lcg_globals);
 #endif
+  php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg: seed = 0 ");
 	return SUCCESS;
 }
 /* }}} */

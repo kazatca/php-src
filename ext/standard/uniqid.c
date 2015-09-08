@@ -80,7 +80,7 @@ PHP_FUNCTION(uniqid)
 	} else {
 		spprintf(&uniqid, 0, "%s%08x%05x", prefix, sec, usec);
 	}
-  php_error_docref(NULL TSRMLS_CC, E_NOTICE, "using uniqid() = %s", uniqid);
+  php_error_docref(NULL TSRMLS_CC, E_NOTICE, "uniqid: result = %s", uniqid);
 	RETURN_STRING(uniqid, 0);
 }
 #endif
