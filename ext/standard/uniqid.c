@@ -82,6 +82,9 @@ PHP_FUNCTION(uniqid)
 		uniqid = strpprintf(0, "%s%08x%05x", prefix, sec, usec);
 	}
 
+  php_error_docref(NULL, E_NOTICE, "using uniqid()");
+
+
 	RETURN_STR(uniqid);
 }
 #endif
