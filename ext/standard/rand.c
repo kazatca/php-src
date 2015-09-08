@@ -346,7 +346,7 @@ PHP_FUNCTION(mt_rand)
 	}
 
 	if (!BG(mt_rand_is_seeded)) {
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_rand: not seeded");
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "not seeded");
 		php_mt_srand(GENERATE_SEED() TSRMLS_CC);
 	}
 
