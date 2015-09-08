@@ -154,7 +154,7 @@ PHPAPI long php_rand(TSRMLS_D)
 PHPAPI php_uint32 php_mt_generate_seed(TSRMLS_D)
 {
 	long ts=time(0);
-	long pid, rnd;
+	long pid, lcg;
 
 #ifdef PHP_WIN32
 	pid=GetCurrentProcessId();
