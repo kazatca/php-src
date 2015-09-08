@@ -359,11 +359,11 @@ PHP_FUNCTION(mt_rand)
 	 * I talked with Cokus via email and it won't ruin the algorithm
 	 */
 	number = (long) (php_mt_rand(TSRMLS_C) >> 1);
-	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_rand: result = %u", number);
+	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "result = %u", number);
 	
 	if (argc == 2) {
 		RAND_RANGE(number, min, max, PHP_MT_RAND_MAX);
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_rand: ranged result = %u", number);
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "ranged result = %u", number);
 	}
 
 
