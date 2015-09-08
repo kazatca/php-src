@@ -57,7 +57,7 @@ PHPAPI void php_srand(long seed TSRMLS_DC);
 PHPAPI long php_rand(TSRMLS_D);
 PHPAPI void php_mt_srand(php_uint32 seed TSRMLS_DC);
 PHPAPI php_uint32 php_mt_rand(TSRMLS_D);
-PHPAPI php_uint32 php_mt_generate_seed(TSRMLS_D);
+php_uint32 php_mt_generate_seed(TSRMLS_D);
 
 #define GENERATE_SEED() (php_mt_generate_seed(TSRMLS_D))
 
