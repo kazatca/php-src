@@ -148,6 +148,28 @@ PHPAPI long php_rand(TSRMLS_D)
 
 #define twist(m,u,v)  (m ^ (mixBits(u,v)>>1) ^ ((php_uint32)(-(php_int32)(loBit(u))) & 0x9908b0dfU))
 
+
+/* {{{ php_mt_generate_seed
+ */
+PHPAPI php_uint32 php_mt_generate_seed(TSRMLS_D)
+{
+	long time=time(0);
+	long pid, rnd;
+
+#ifdef PHP_WIN32
+	pid=GetCurrentProcessId();
+#else
+	pid=getpid();
+#endif
+	lcg=1000000.0 * php_combined_lcg(TSRMLS_C);
+	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_generate_seed: time = %u", time);
+	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_generate_seed: pid = %u", pid);
+	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_generate_seed: lcg = %u", lcg);
+
+	return (time*pid) ^ lcg;
+}
+/* }}} */
+
 /* {{{ php_mt_initialize
  */
 static inline void php_mt_initialize(php_uint32 seed, php_uint32 *state)
@@ -324,6 +346,7 @@ PHP_FUNCTION(mt_rand)
 	}
 
 	if (!BG(mt_rand_is_seeded)) {
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_rand: not seeded");
 		php_mt_srand(GENERATE_SEED() TSRMLS_CC);
 	}
 
@@ -336,9 +359,13 @@ PHP_FUNCTION(mt_rand)
 	 * I talked with Cokus via email and it won't ruin the algorithm
 	 */
 	number = (long) (php_mt_rand(TSRMLS_C) >> 1);
+	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_rand: result = %u", number);
+	
 	if (argc == 2) {
 		RAND_RANGE(number, min, max, PHP_MT_RAND_MAX);
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_rand: ranged result = %u", number);
 	}
+
 
 	RETURN_LONG(number);
 }

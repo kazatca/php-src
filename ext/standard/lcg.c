@@ -80,7 +80,7 @@ static void lcg_seed(TSRMLS_D) /* {{{ */
 
 	if (gettimeofday(&tv, NULL) == 0) {
 		LCG(s1) = tv.tv_sec ^ (tv.tv_usec<<11);
-    php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s1 = %d ^ %d = %d", tv.tv_sec, tv.tv_usec<<11, LCG(s1));
+    php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s1 = %u ^ %u = %u", tv.tv_sec, tv.tv_usec<<11, LCG(s1));
 
 	} else {
 		LCG(s1) = 1;
@@ -88,16 +88,16 @@ static void lcg_seed(TSRMLS_D) /* {{{ */
 	}
 #ifdef ZTS
 	LCG(s2) = (long) tsrm_thread_id();
-  php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s2 = %d (thread id)", LCG(s2));
+  php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s2 = %u (thread id)", LCG(s2));
 #else
 	LCG(s2) = (long) getpid();
-  php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s2 = %d (process id)", LCG(s2));
+  php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s2 = %u (process id)", LCG(s2));
 #endif
 
 	/* Add entropy to s2 by calling gettimeofday() again */
 	if (gettimeofday(&tv, NULL) == 0) {
 		LCG(s2) ^= (tv.tv_usec<<11);
-    php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s2 ^= %d ", tv.tv_usec<<11);
+    php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s2 ^= %u ", tv.tv_usec<<11);
 	}
 
 	LCG(seeded) = 1;
