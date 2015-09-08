@@ -97,7 +97,7 @@ static void lcg_seed(TSRMLS_D) /* {{{ */
 	/* Add entropy to s2 by calling gettimeofday() again */
 	if (gettimeofday(&tv, NULL) == 0) {
 		LCG(s2) ^= (tv.tv_usec<<11);
-    php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s2 ^= %u ", tv.tv_usec<<11);
+    php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg_seed: s2 ^= %u -> %u", tv.tv_usec<<11, LCG(s2));
 	}
 
 	LCG(seeded) = 1;
@@ -117,7 +117,6 @@ PHP_MINIT_FUNCTION(lcg) /* {{{ */
 #else
   lcg_init_globals(&lcg_globals);
 #endif
-  php_error_docref(NULL TSRMLS_CC, E_NOTICE, "lcg: seed = 0 ");
 	return SUCCESS;
 }
 /* }}} */
