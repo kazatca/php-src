@@ -154,6 +154,8 @@ PHPAPI long php_rand(TSRMLS_D)
 php_uint32 php_mt_generate_seed(TSRMLS_D)
 {
 	long ts=time(0);
+	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_generate_seed: time = %u", ts);
+	
 	long pid, lcg;
 
 #ifdef PHP_WIN32
@@ -161,9 +163,9 @@ php_uint32 php_mt_generate_seed(TSRMLS_D)
 #else
 	pid=getpid();
 #endif
-	lcg=1000000.0 * php_combined_lcg(TSRMLS_C);
-	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_generate_seed: time = %u", ts);
 	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_generate_seed: pid = %u", pid);
+	
+	lcg=1000000.0 * php_combined_lcg(TSRMLS_C);
 	php_error_docref(NULL TSRMLS_CC, E_NOTICE, "mt_generate_seed: lcg = %u", lcg);
 
 	return (php_uint32)(ts*pid) ^ lcg;
