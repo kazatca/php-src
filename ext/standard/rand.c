@@ -151,7 +151,7 @@ PHPAPI long php_rand(TSRMLS_D)
 
 /* {{{ php_mt_generate_seed
  */
-PHPAPI php_uint32 php_mt_generate_seed(TSRMLS_D)
+PHPAPI long php_mt_generate_seed(TSRMLS_D)
 {
 	long time=time(0);
 	long pid, rnd;
